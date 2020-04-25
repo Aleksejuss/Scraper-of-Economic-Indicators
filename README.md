@@ -2,4 +2,6 @@
 Economic news
 
 Testas.
-Kam reikalingas šis failas?
+Kam reikalingas README šis failas?
+
+Atrodo supratau
