@@ -6,4 +6,8 @@ Kam reikalingas README šis failas?
 
 Atrodo supratau
 
-test again
+Functions added:
+
+missing_values_to_nan
+drop_nan
+filtration
