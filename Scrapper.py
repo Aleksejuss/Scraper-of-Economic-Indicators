@@ -1,39 +1,22 @@
-from requests import get
 import requests
-from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
 import logging
 import datetime
 import csv
 import pandas as pd
+import WebReader as wr
+import Data_cleaning as dc
 
 
 forcal = []
-
-
-def get_url_content(url):
-    # Get url content as text
-    try:
-        req = requests.get(url)
-        return req.text
-    except:
-        return None
-
-
-def parse_content(url, element_tag, class_name):
-    data = get_url_content(url)
-    soup = BeautifulSoup(data, "html.parser")
-    # get and parse table data, ignoring details and graph
-    table = soup.find(element_tag, class_=class_name)
-    return table
 
 
 def append_day_info(startlink):
     # Takes url representing certain day as parameter
     # Appends day info to forcal list
 
-    table = parse_content(startlink, 'table', 'calendar__table')
+    table = wr.parse_content(startlink, 'table', 'calendar__table')
         # do not use the ".calendar__row--grey" css selector (reserved for historical data)
     trs = table.select("tr.calendar__row.calendar_row")
     fields = ["date","time","currency","impact","event","actual","forecast","previous"]
@@ -98,9 +81,11 @@ def getEconomicCalendar(startlink,endlink):
     append_day_info(startlink)
 
     # exit recursion when last available link has reached
-    if startlink==endlink:
+    if startlink == endlink:
         logging.info("Successfully retrieved data")
-        return
+        #result_DF = pd.DataFrame(forcal)
+        #print(result_DF)
+        return pd.DataFrame(forcal)
 
     data = get_url_content(startlink)
     soup = BeautifulSoup(data, "html.parser")
@@ -125,7 +110,12 @@ def setLogger():
 
 
 if __name__ == '__main__':
-    print('vykdome main')
+    
+    print('Main starts')
     setLogger()
-    getEconomicCalendar('https://www.forexfactory.com/calendar?day=apr1.2020', 'https://www.forexfactory.com/calendar?day=apr3.2020')
-    print(pd.DataFrame(forcal))
+    data = getEconomicCalendar('https://www.forexfactory.com/calendar?day=apr1.2020', 'https://www.forexfactory.com/calendar?day=apr1.2020')
+    print(data)
+    print(dc.cleaning_data(data, 'Forecast'))
+    print(dc.chg_type_and_cleaning_ch(data, 'Forecast'))
+    #print(dc.filtration(data, 'Currency', 'EUR', 'Impact', 'LOW')) Kolkas neveikia
+
