@@ -85,13 +85,9 @@ def getEconomicCalendar(startlink,endlink):
         logging.info("Successfully retrieved data")
         #result_DF = pd.DataFrame(forcal)
         #print(result_DF)
-        return
-
-    data = wr.get_url_content(startlink)
-
         return pd.DataFrame(forcal)
 
-    data = get_url_content(startlink)
+    data = wr.get_url_content(startlink)
     soup = BeautifulSoup(data, "html.parser")
     # get the link for the next week and follow
 
