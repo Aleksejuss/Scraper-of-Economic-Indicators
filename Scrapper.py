@@ -85,6 +85,10 @@ def getEconomicCalendar(startlink,endlink):
         logging.info("Successfully retrieved data")
         #result_DF = pd.DataFrame(forcal)
         #print(result_DF)
+        return
+
+    data = wr.get_url_content(startlink)
+
         return pd.DataFrame(forcal)
 
     data = get_url_content(startlink)
@@ -113,9 +117,11 @@ if __name__ == '__main__':
     
     print('Main starts')
     setLogger()
-    data = getEconomicCalendar('https://www.forexfactory.com/calendar?day=apr1.2020', 'https://www.forexfactory.com/calendar?day=apr1.2020')
-    print(data)
+    getEconomicCalendar('https://www.forexfactory.com/calendar?day=apr1.2020', 'https://www.forexfactory.com/calendar?day=apr3.2020')
+    data = pd.DataFrame(forcal)
+    print('test:', data)
     print(dc.cleaning_data(data, 'Forecast'))
     print(dc.chg_type_and_cleaning_ch(data, 'Forecast'))
-    #print(dc.filtration(data, 'Currency', 'EUR', 'Impact', 'LOW')) Kolkas neveikia
+    print(dc.filtration(data, 'Currency', 'EUR', 'Impact', 'Low'))
+
 
